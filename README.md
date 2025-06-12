@@ -1,4 +1,4 @@
-# 🎶 Flowphony: Diverse Orchestration of Symbolic Music Composition Using GFlowNet-Tuned Multi-Symphony Agents
+# 🎶 Flowphony: Diverse Orchestration of Symbolic Music Symphony Using GFlowNet-Tuned Composing Agents
 
 **Flowphony** is a multi-agent symbolic music generation system that composes diverse and coherent music using **GFlowNet** based finetuning for melody and harmony agents. Inspired by the collaborative architecture of ComposerX, Flowphony is designed for structured, high-quality symbolic composition in formats like **ABC notation** or **MIDI tokens**.
 
