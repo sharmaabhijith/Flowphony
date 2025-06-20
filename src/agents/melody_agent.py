@@ -1,8 +1,8 @@
 from typing import Dict, Any, List, Tuple
 import torch
 import autogen
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from config.config import Config, AgentConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from config.config import Config
 
 SYSTEM_MESSAGE = """
 
@@ -54,7 +54,7 @@ ADDITIONAL ABC NOTATION SYMBOL RULES:
 All symbols must be used accurately to preserve proper musical and structural meaning.
 
 STRICTLY ensure that new note generated is in the same scale of the key.
-Continue this until the melody is complete (~20 seconds long). End the melody with closing `:|` and full formatting.
+Continue this until the melody is complete (~40 seconds long). End the melody with closing `:|` and full formatting.
 
 Final output format:
 ```
@@ -74,37 +74,62 @@ Your output must **only** contain valid ABC notation in a markdown code block. N
 
 class MelodyAgent(autogen.AssistantAgent):
     def __init__(
-            self, 
-            name: str = "MelodyAgent",
-            model_path: str = None,
-            device: str = "cuda",
-            llm_config: Dict[str, Any] | None = None,
-            config: Config = None,
-            agent_config: AgentConfig = None
+        self, 
+        model_alias: str = "MelodyAgent",
+        model_name: str = None,
+        device: str = "cuda",
+        llm_config: Dict[str, Any] | None = None,
+        config: Config = None,
         ):
         super().__init__(
-            name=name,
-            system_message=SYSTEM_MESSAGE,
-            llm_config=llm_config,
-            is_termination_msg=lambda m: isinstance(m, str) and m.strip().endswith("|]"),
+        name=model_alias,
+        system_message=SYSTEM_MESSAGE,
+        llm_config=llm_config,
+        is_termination_msg=lambda m: isinstance(m, str) and m.strip().endswith("|]"),
         )  
         
         # Store configs
         self.config = config
-        self.agent_config = agent_config
         
         # Initialize fine-tuned model if path is provided
-        if model_path:
+        if model_name:
             try:
-                self.tokenizer = AutoTokenizer.from_pretrained(model_path)
-                self.model = AutoModelForCausalLM.from_pretrained(
-                    model_path, device_map=device, torch_dtype=torch.float16
+                print(f"Loading model with 4-bit quantization: {model_name}")
+                
+                # Load tokenizer
+                self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+                print("✓ Tokenizer loaded successfully")
+                
+                # Configure 4-bit quantization
+                quantization_config = BitsAndBytesConfig(
+                    load_in_4bit=True,
+                    bnb_4bit_compute_dtype=torch.float16,
+                    bnb_4bit_quant_type="nf4",
+                    bnb_4bit_use_double_quant=True,
                 )
+                
+                # Load model with 4-bit quantization
+                self.model = AutoModelForCausalLM.from_pretrained(
+                    model_name,
+                    quantization_config=quantization_config,
+                    device_map=device,
+                    torch_dtype=torch.float16,
+                    low_cpu_mem_usage=True,
+                    trust_remote_code=True
+                )
+                
                 self.device = device
                 self.use_fine_tuned_model = True
-                print(f"Loaded fine-tuned melody model from {model_path}")
+                print(f"✓ 4-bit quantized model loaded successfully from {model_name}")
+                
+                # Print memory usage info
+                if torch.cuda.is_available():
+                    memory_used = torch.cuda.memory_allocated() / 1024**3
+                    print(f"GPU memory used: {memory_used:.2f} GB")
+                
             except Exception as e:
-                print(f"Warning: Could not load fine-tuned model: {e}")
+                print(f"❌ Error loading 4-bit quantized model: {e}")
+                print(f"Error type: {type(e).__name__}")
                 print("Falling back to LLM-based melody generation")
                 self.use_fine_tuned_model = False
                 self.model = None
@@ -124,10 +149,8 @@ class MelodyAgent(autogen.AssistantAgent):
         """Generate the next note and get its probability using the fine-tuned model"""
         if not self.use_fine_tuned_model:
             return "z4", 0.1
-        
         if not self.config:
             return "z4", 0.1
-            
         inputs = self.tokenizer(
             current_melody,
             return_tensors="pt",
@@ -157,10 +180,8 @@ class MelodyAgent(autogen.AssistantAgent):
         """Generate melody using the fine-tuned model"""
         if not self.use_fine_tuned_model:
             return None
-        
         if not self.config:
             return None
-            
         current_melody = prompt
         max_notes = 64  # Limit for melody generation
         for _ in range(max_notes):
@@ -179,6 +200,8 @@ class MelodyAgent(autogen.AssistantAgent):
     # ------------------------------------------------------------------
     def generate_reply(self, messages: List[dict]) -> str:
         prompt = messages[-1]["content"]
+        if not isinstance(prompt, str):
+            prompt = str(prompt)
         if self._is_music_request(prompt):
             melody = self._generate_music(prompt)
             return melody if melody else "z4"
@@ -186,6 +209,8 @@ class MelodyAgent(autogen.AssistantAgent):
     
     def receive(self, message: str, sender: autogen.Agent, request_reply: bool = None, silent: bool = False):
         """Override receive method to use fine-tuned model when appropriate"""
+        if not isinstance(message, str):
+            message = str(message)
         if self._is_music_request(message):
             generated_music = self._generate_music(message)
             if generated_music:

@@ -3,14 +3,8 @@ X:1
 T:Balkan Brass Extravaganza
 M:7/8
 L:1/8
-K:E
-%%MIDI tempo 160
-V:1 name=Trumpet
-V:2 name=Trombone
-V:3 name=Tuba
-[V:1] z4 EFG | ABcB AGFE | z4 EFG | ABcB AGFE |
-   z4 GAB | cBAG FEDC | z4 GAB | cBAG FEDC |
-[V:2] z4 BG, B, | E, G,B,E, G,B,E, | z4 BG, B, | E, G,B,E, G,B,E, |
-   z4 E, G, B, | G,B,EG, B,EG, | z4 E, G, B, | G,B,EG, B,EG, |
-[V:3] z4 E,,G,,B,, | E,,G,,B,,E,, G,,B,,E,, | z4 E,,G,,B,, | E,,G,,B,,E,, G,,B,,E,, |
-   z4 G,,B,,E, | G,,B,,E,G, B,,E,G, | z4 G,,B,,E, | G,,B,,E,G, B,,E,G, |
+K:G
+G2 ABc | d2 e3/2e/2 dB | G2 ABc | d2 e3/2e/2 dB |
+G2 ABc | d3/2e/2 f3/2e/2 dB | c2 BA G2 |1 ABc :|2 ABd ||
+|: g3/2f/2 ed e3/2d/2 | B2 GAB | g3/2f/2 ed e3/2d/2 | B2 G2 G2 |
+g3/2f/2 ed e3/2d/2 | B3/2c/2 d3/2B/2 G2 | c2 BA G2 |1 ABd :|2 ABc ||

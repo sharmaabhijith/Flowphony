@@ -6,7 +6,7 @@ from config.config import Config
 from agents.melody_agent import MelodyAgent
 
 class MusicOrchestrator:
-    def __init__(self, config: Config, fine_tune: bool = False, melody_model_path: str = None):
+    def __init__(self, config: Config, fine_tune: bool = False):
         self.config = config
         # Configure LLM settings for all agents
         self.llm_config = {
@@ -22,7 +22,7 @@ class MusicOrchestrator:
         }
         
         # Load system messages from JSON file
-        with open('src/config/sysmsg.json', 'r') as f:
+        with open('config/sysmsg.json', 'r') as f:
             self.system_messages = json.load(f)
         
         # Initialize AutoGen agents
@@ -40,36 +40,33 @@ class MusicOrchestrator:
         )
 
         # Initialize Melody Agent with fine-tuned model if specified
-        if fine_tune and melody_model_path:
+        if fine_tune:
             # Use fine-tuned Hugging Face model for melody agent
             Melody = MelodyAgent(
-                name="MelodyAgent",
-                model_path=melody_model_path,
+                model_alias="MelodyAgent",
+                model_name=self.config.melody_model.model_name,
                 device=self.config.melody_model.device,
                 llm_config=self.llm_config,
                 config=self.config,
-                agent_config=self.config.melody_agent
             )
-            print(f"Using fine-tuned melody model from: {melody_model_path}")
         else:
             Melody = autogen.AssistantAgent(
                 name="MelodyAgent",
                 system_message=self.system_messages["melody"],
                 llm_config=self.llm_config,
             )
-            print("Using regular AutoGen melody agent")
 
-        Harmony = autogen.AssistantAgent(
-            name="HarmonyAgent",
-            system_message=self.system_messages["harmony"],
-            llm_config=self.llm_config,
-        )
+        # Harmony = autogen.AssistantAgent(
+        #     name="HarmonyAgent",
+        #     system_message=self.system_messages["harmony"],
+        #     llm_config=self.llm_config,
+        # )
         
-        Instrument = autogen.AssistantAgent( 
-            name="InstrumentAgent",
-            system_message=self.system_messages["instrument"],
-            llm_config=self.llm_config
-        )
+        # Instrument = autogen.AssistantAgent( 
+        #     name="InstrumentAgent",
+        #     system_message=self.system_messages["instrument"],
+        #     llm_config=self.llm_config
+        # )
         
         Arrangement = autogen.AssistantAgent(
             name="ArrangementAgent",
@@ -84,7 +81,7 @@ class MusicOrchestrator:
         )
         
         # Store agents for easy reuse
-        self.agents = [self.user_proxy, Leader, Melody, Harmony, Instrument, Arrangement, Reviewer]
+        self.agents = [self.user_proxy, Leader, Melody, Arrangement, Reviewer]
     
     def extract_title(self, abc_notation: str) -> str:
         """Extract title from ABC notation"""

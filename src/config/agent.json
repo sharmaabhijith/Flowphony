@@ -1,41 +1,15 @@
 {
     "melody_model": {
-        "model_name": "facebook/musicgen-small",
-        "model_path": "models/melody",
+        "model_alias": "melody",
+        "model_name": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
         "device": "cuda",
-        "batch_size": 32,
+        "batch_size": 1,
         "max_length": 2048,
         "temperature": 0.7,
         "top_p": 0.9,
         "top_k": 50,
         "base_url": "https://api.deepinfra.com/v1/openai",
         "api_key": "${DEEPINFRA_API_KEY}"
-    },
-    "harmony_model": {
-        "model_name": "facebook/musicgen-small",
-        "model_path": "models/harmony",
-        "device": "cuda",
-        "batch_size": 32,
-        "max_length": 2048,
-        "temperature": 0.7,
-        "top_p": 0.9,
-        "top_k": 50,
-        "base_url": "https://api.deepinfra.com/v1/openai",
-        "api_key": "${DEEPINFRA_API_KEY}"
-    },
-    "melody_agent": {
-        "name": "MelodyAgent",
-        "description": "Compose melodies using fine-tuned model",
-        "temperature": 0.7,
-        "max_tokens": 1024,
-        "timeout": 60
-    },
-    "harmony_agent": {
-        "name": "HarmonyAgent",
-        "description": "Compose harmonies using fine-tuned model",
-        "temperature": 0.7,
-        "max_tokens": 1024,
-        "timeout": 60
     },
     "llm_config_list": [
         {
