@@ -17,8 +17,9 @@ class ModelConfig:
     model_alias: str
     model_name: str
     device: str = "cuda"
-    batch_size: int = 32
-    max_length: int = 512
+    quantization: str = "4bit"
+    batch_size: int = 1
+    max_length: int = 2048
     temperature: float = 0.7
     top_p: float = 0.9
     top_k: int = 50

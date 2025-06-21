@@ -96,7 +96,8 @@ class MusicOrchestrator:
         groupchat = autogen.GroupChat(
             agents=self.agents,
             messages=[],
-            max_round=5
+            max_round=8,
+            speaker_selection_method="round_robin"
         )
         manager = autogen.GroupChatManager(
             groupchat=groupchat,

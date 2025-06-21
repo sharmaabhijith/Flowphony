@@ -1,7 +1,7 @@
 {
     "melody_model": {
         "model_alias": "melody",
-        "model_name": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "model_name": "meta-llama/Meta-Llama-3.1-8B-Instruct",
         "device": "cuda",
         "quantization": "4bit",
         "batch_size": 1,

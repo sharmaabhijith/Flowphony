@@ -1,3 +1,6 @@
 LLM_CONFIG_LIST
 abcmidi*
 *.deb
+*.music
+music
+__pycache__

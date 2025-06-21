@@ -54,7 +54,7 @@ ADDITIONAL ABC NOTATION SYMBOL RULES:
 All symbols must be used accurately to preserve proper musical and structural meaning.
 
 STRICTLY ensure that new note generated is in the same scale of the key.
-Continue this until the melody is complete (~40 seconds long). End the melody with closing `:|` and full formatting.
+Continue this until the melody is complete (~30 seconds long). End the melody with closing `:|` and full formatting.
 
 Final output format:
 ```
@@ -114,7 +114,6 @@ class MelodyAgent(autogen.AssistantAgent):
                     quantization_config=quantization_config,
                     device_map=device,
                     torch_dtype=torch.float16,
-                    low_cpu_mem_usage=True,
                     trust_remote_code=True
                 )
                 
@@ -196,25 +195,58 @@ class MelodyAgent(autogen.AssistantAgent):
         return current_melody.strip()
     
     # ------------------------------------------------------------------
-    # AutoGen calls generate_reply() when it's this agent's turn
+    # Generate a reply when the framework gives this agent the turn
     # ------------------------------------------------------------------
     def generate_reply(self, messages: List[dict]) -> str:
-        prompt = messages[-1]["content"]
-        if not isinstance(prompt, str):
-            prompt = str(prompt)
-        if self._is_music_request(prompt):
-            melody = self._generate_music(prompt)
-            return melody if melody else "z4"
+        """
+        AutoGen passes the entire chat history as `messages`.
+        We look at the most recent *external* message (i.e. not from ourselves).
+        If it's a music request – or explicitly @mentions this agent – we
+        generate/extend a melody.  Otherwise we fall back to the parent class.
+        """
+        # Find the latest message not written by this agent
+        last_msg = next(
+            (m for m in reversed(messages) if m.get("name") != self.name), None
+        )
+        prompt = str(last_msg.get("content", "")) if last_msg else ""
+
+        wants_music = self._is_music_request(prompt) or f"@{self.name}" in prompt
+
+        if wants_music:
+            melody = self._generate_music(prompt) or "z4"
+            # Wrap in a markdown ABC block as required by SYSTEM_MESSAGE
+            return f"```abc\n{melody}\n```"
+
+        # Not music-related → delegate to the normal LLM reply
         return super().generate_reply(messages)
-    
-    def receive(self, message: str, sender: autogen.Agent, request_reply: bool = None, silent: bool = False):
-        """Override receive method to use fine-tuned model when appropriate"""
-        if not isinstance(message, str):
-            message = str(message)
-        if self._is_music_request(message):
-            generated_music = self._generate_music(message)
-            if generated_music:
+
+
+    # ------------------------------------------------------------------
+    # Intercept direct messages sent TO this agent
+    # ------------------------------------------------------------------
+    def receive(
+        self,
+        message: str | dict,
+        sender: autogen.Agent,
+        request_reply: bool | None = None,
+        silent: bool = False,
+    ):
+        """
+        If the incoming message is a music request (or @mentions us),
+        respond immediately with a melody; otherwise use the default behaviour.
+        """
+        content = (
+            message.get("content") if isinstance(message, dict) else message
+        )
+        content = str(content)
+
+        if self._is_music_request(content) or f"@{self.name}" in content:
+            melody = self._generate_music(content)
+            if melody:
+                payload = f"```abc\n{melody}\n```"
                 if request_reply:
-                    self.send(generated_music, recipient=sender)
-                return generated_music
+                    self.send(payload, recipient=sender, silent=silent)
+                return payload
+
+        # Fall back to base class handling
         return super().receive(message, sender, request_reply, silent)
