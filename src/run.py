@@ -1,11 +1,10 @@
 import json
 import os
 import sys
-import autogen
 import asyncio
 import argparse
 from orchestrator import MusicOrchestrator
-from config.config import Config
+from agents.helpers.config import Config
 from utils.converter import convert_abc_to_wav
     
 
@@ -13,18 +12,15 @@ def main():
     parser = argparse.ArgumentParser(description="Welcome to ComposerX, a multi-agent based text-to-music generation system.")
     parser.add_argument("--prompts_file", "-p", type=str, required=True, help="Path to the JSON file containing multiple prompts.")
     parser.add_argument("--results_dir", "-o", type=str, required=True, help="Directory to store the results.")
-    parser.add_argument("--fine_tune", "-f", action="store_true", help="Use fine-tuned models if available.")
+    parser.add_argument("--fine_tune", "-f", type=dict, default={"melody": True, "harmony": False}, help="Use fine-tuned models if available.")
     args = parser.parse_args()
 
     results_dir = args.results_dir
     prompts_file = args.prompts_file
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
-    config = Config.from_file('config/agent.json')
-    if args.fine_tune:
-        orchestrator = MusicOrchestrator(config, fine_tune=True)
-    else:
-        orchestrator = MusicOrchestrator(config, fine_tune=False)
+    config = Config.from_file('agents/helpers/config.yaml')
+    orchestrator = MusicOrchestrator(config, args.fine_tune)
 
     # Load prompts from JSON file
     with open(prompts_file, "r") as file:

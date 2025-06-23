@@ -1,0 +1,19 @@
+abc
+X:1
+T:Balkan Brass Harmonization
+C:Harmony Agent
+M:7/8
+L:1/8
+K:C
+V:1 name="Trumpet" clef=treble
+%%MIDI program 57
+|:G2 AB c2 de|fed c2 BA|G2 AB c2 de|f2 ed c3:|
+|:e2 fg a2 ba|g2 fe d2 cB|A2 G2 F2 ED|C6 z2:|
+V:2 name="Trombone" clef=bass
+%%MIDI program 58
+|:E,2 F,G, G,2 A,B,|C2 B,A, G,2 F,E,|E,2 F,G, G,2 A,B,|A,2 G,F, G,3:|
+|:C2 DE E2 FG|E2 DC B,2 AG,|F,2 G,2 A,2 G,2|E,6 z2:|
+V:3 name="Tuba" clef=bass
+%%MIDI program 44
+|:C,,2 D,,E,, E,,2 F,,G,,|G,,2 F,,E,, C,,2 D,,E,,|C,,2 D,,E,, E,,2 F,,G,,|G,,2 F,,E,, C,,3:|
+|:G,,2 A,,B,, C,2 D,E,|C2 B,,A,, G,,2 A,,B,,|F,,2 E,,D,, C,,2 B,,,C,|C,,6 z2:|
