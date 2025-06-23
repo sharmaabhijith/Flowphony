@@ -1,0 +1,121 @@
+melody_model:
+  model_name: meta-llama/Meta-Llama-3.1-8B-Instruct
+  device: cuda
+  quantization: 4bit
+  batch_size: 1
+  max_length: 2048
+  temperature: 0.7
+  top_p: 0.9
+  top_k: 50
+
+api_model:
+  model_name: meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8
+  base_url: https://api.deepinfra.com/v1/openai
+  api_key: ${DEEPINFRA_API_KEY}
+  batch_size: 1
+  max_length: 2048
+  temperature: 0.7
+  top_p: 0.9
+  top_k: 50
+
+output_dir: output
+
+# Training configuration
+training:
+  learning_rate: 1e-4
+  batch_size: 4
+  max_grad_norm: 1.0
+  warmup_steps: 100
+  save_steps: 500
+  logging_steps: 50
+  eval_steps: 200
+  max_iterations: 1000
+  
+  # GFlowNet specific
+  temperature: 1.0
+  reward_scale: 1.0
+  trajectory_balance_loss_weight: 1.0
+  
+  # Model parameters
+  max_length: 512
+  max_new_tokens: 128
+  min_melody_length: 20
+  max_melody_length: 200
+  
+  # LoRA parameters
+  lora_r: 16
+  lora_alpha: 32
+  lora_dropout: 0.1
+  target_modules: ["q_proj", "v_proj", "k_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
+  
+  # Online learning parameters
+  experience_buffer_size: 1000
+  min_experiences_for_training: 10
+  update_frequency: 1
+  
+  # Reward parameters
+  reward_temperature: 0.1
+  quality_weight: 0.8
+  validity_weight: 0.2
+  
+  # Logging
+  use_wandb: true
+  project_name: "melody-gflownet-lora"
+  
+  # Paths
+  output_dir: "models/melody"
+  checkpoint_dir: "checkpoints/melody"
+  logs_dir: "logs/melody"
+
+# Prompt configuration
+prompts_file: null  # Path to JSON file containing custom prompts (optional)
+resume_from: null   # Path to checkpoint to resume training from (optional)
+evaluate: false     # Whether to evaluate model after training
+
+# Prompt Generation Configuration
+prompts:
+  num_prompts: 500
+  styles: [
+    "folk", "jazz", "classical", "blues", "country", "rock", "pop", 
+    "electronic", "ambient", "lullaby", "march", "waltz", "ballad",
+    "upbeat", "melancholic", "energetic", "peaceful", "dramatic",
+    "romantic", "mysterious", "joyful", "contemplative", "serene",
+    "passionate", "nostalgic", "hopeful", "cheerful", "elegant"
+  ]
+  keys: [
+    "C major", "G major", "D major", "A major", "E major", "B major",
+    "F major", "Bb major", "Eb major", "Ab major", "Db major", "Gb major",
+    "A minor", "E minor", "B minor", "F# minor", "C# minor", "G# minor",
+    "D minor", "G minor", "C minor", "F minor", "Bb minor", "Eb minor"
+  ]
+  instruments: [
+    "piano", "guitar", "violin", "flute", "clarinet", "saxophone",
+    "trumpet", "cello", "harp", "accordion", "mandolin", "banjo",
+    "organ", "synthesizer", "acoustic guitar", "electric guitar",
+    "viola", "bassoon", "oboe", "trombone", "tuba", "percussion"
+  ]
+  tempos: [
+    "slow", "moderate", "fast", "lively", "relaxed", "energetic",
+    "gentle", "brisk", "leisurely", "upbeat", "calm", "dynamic",
+    "adagio", "andante", "allegro", "presto", "largo", "vivace"
+  ]
+  moods: [
+    "happy", "sad", "peaceful", "excited", "romantic", "mysterious",
+    "joyful", "contemplative", "energetic", "serene", "passionate",
+    "nostalgic", "hopeful", "melancholic", "cheerful", "dramatic",
+    "tranquil", "intense", "playful", "solemn", "whimsical", "heroic"
+  ]
+
+# Evaluation Configuration
+evaluation:
+  num_eval_samples: 5
+  eval_prompts_file: null  # Will use generated prompts if not specified
+  metrics: ["reward", "quality", "validity", "diversity"]
+
+# System Configuration
+system:
+  seed: 42
+  num_workers: 4
+  pin_memory: true
+  mixed_precision: true
+  gradient_accumulation_steps: 1 

@@ -137,33 +137,33 @@ arrangement: |-
   Make sure to delete all the empty lines, especially empty lines between each voice.
   Markdown your work using ```    ``` to the client.
 
-reviewer: |-
-  You are a skillful musician, you are expertized in music theory. 
-  You need to be very strict and critical about their work.
-  You will check the entire work and provide a set of scalar scores as a feedback/reward for each criteria. 
-  The reward will be later used to fine tune the melody agent.
-  Judge it on five criteria, giving an INTEGER score from 0 to 100:
-    • melody: motive development, phrase shape, pitch variety
-    • harmony: chord quality, progressions, counterpoint, voice-leading
-    • rhythm: groove, metric interest, interplay with melody, dynamics
-    • timbre: instrument choice, blend, articulation, expressive control
-    • form: sectional balance, transitions, introduction & cadence logic.
+# reviewer: |-
+#   You are a skillful musician, you are expertized in music theory. 
+#   You need to be very strict and critical about their work.
+#   You will check the entire work and provide a set of scalar scores as a feedback/reward for each criteria. 
+#   The reward will be later used to fine tune the melody agent.
+#   Judge it on five criteria, giving an INTEGER score from 0 to 100:
+#     • melody: motive development, phrase shape, pitch variety
+#     • harmony: chord quality, progressions, counterpoint, voice-leading
+#     • rhythm: groove, metric interest, interplay with melody, dynamics
+#     • timbre: instrument choice, blend, articulation, expressive control
+#     • form: sectional balance, transitions, introduction & cadence logic.
 
-  —Output RULES (very strict)—
-  1. Return **only** valid JSON, with this exact schema and key order:
+#   —Output RULES (very strict)—
+#   1. Return **only** valid JSON, with this exact schema and key order:
 
-  {
-    "scores": {
-      "melody": <int 0-100>,
-      "harmony": <int 0-100>,
-      "rhythm": <int 0-100>,
-      "timbre": <int 0-100>,
-      "form": <int 0-100>
-    },
-    "overall_comment": "<your critique>"
-  }
+#   {
+#     "scores": {
+#       "melody": <int 0-100>,
+#       "harmony": <int 0-100>,
+#       "rhythm": <int 0-100>,
+#       "timbre": <int 0-100>,
+#       "form": <int 0-100>
+#     },
+#     "overall_comment": "<your critique>"
+#   }
 
-  2. Do **not** wrap JSON in markdown fences, code blocks, or extra prose.
-  3. Use plain ASCII double-quotes for all strings; escape any internal quotes.
-  4. Provide no keys, fields, or text other than those specified.
-  5. If the music is empty or invalid, set every score to 0.
+#   2. Do **not** wrap JSON in markdown fences, code blocks, or extra prose.
+#   3. Use plain ASCII double-quotes for all strings; escape any internal quotes.
+#   4. Provide no keys, fields, or text other than those specified.
+#   5. If the music is empty or invalid, set every score to 0.

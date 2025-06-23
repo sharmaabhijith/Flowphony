@@ -59,11 +59,6 @@ class BaseAgent(ABC):
         })
         return response
     
-    @abstractmethod
-    def generate_response(self, message: str) -> str:
-        """Generate a response to the given message - to be implemented by subclasses"""
-        pass
-    
     def call_deepinfra_api(self, messages: List[Dict[str, str]]) -> str:
         """Call DeepInfra API for inference using OpenAI client"""
         if not self.client:

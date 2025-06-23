@@ -7,7 +7,7 @@ import os
 import sys
 from config.config import Config
 from agents.melody_agent import MelodyAgent
-import autogen
+import tester.autogen as autogen
 
 def test_melody_agent_initialization():
     """Test that MelodyAgent can be initialized properly"""
