@@ -17,13 +17,25 @@ class HarmonyAgent(BaseAgent):
         response = self.call_deepinfra_api(messages)
         return response
     
-    def add_harmony_to_melody(self, melody: str) -> str:
+    def add_harmony_to_melody(self, melody: str, prompt_data: dict = None) -> str:
         """Add harmonic elements to the given melody"""
+        # Extract relevant information from prompt_data if available
+        key_info = ""
+        chord_progression_info = ""
+        genre_info = ""
+        
+        if prompt_data:
+            key_info = f"Key: {prompt_data.get('key', 'C major')}\n"
+            chord_progression_info = f"Chord Progression: {prompt_data.get('chord_progression', 'Standard')}\n"
+            genre_info = f"Genre: {prompt_data.get('genre', 'General')}\n"
+        
         harmony_prompt = f"""
         Given the following melody in ABC notation:
 
         {melody}
 
-        Please add appropriate harmonic elements to this melody:
+        {key_info}{chord_progression_info}{genre_info}
+        
+        Please add appropriate harmonic elements to this melody, taking into account the specified key, chord progression, and genre style:
         """
         return self.generate_response(harmony_prompt) 

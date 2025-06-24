@@ -17,13 +17,23 @@ class InstrumentAgent(BaseAgent):
         response = self.call_deepinfra_api(messages)
         return response
     
-    def add_instrument_to_harmonic_melody(self, harmonic_melody: str) -> str:
+    def add_instrument_to_harmonic_melody(self, harmonic_melody: str, prompt_data: dict = None) -> str:
         """Add instrument elements to the given harmonic melody"""
+        # Extract instrument information from prompt_data if available
+        instruments_info = ""
+        genre_info = ""
+        
+        if prompt_data:
+            instruments_info = f"Specified Instruments: {prompt_data.get('instruments', 'Piano')}\n"
+            genre_info = f"Genre: {prompt_data.get('genre', 'General')}\n"
+        
         instrument_prompt = f"""
         Given the following harmonic melody in ABC notation:
 
         {harmonic_melody}
 
-        Please add appropriate instrument elements to this melody:
+        {instruments_info}{genre_info}
+        
+        Please add appropriate instrument elements to this melody, using the specified instruments and considering the genre style:
         """
         return self.generate_response(instrument_prompt) 

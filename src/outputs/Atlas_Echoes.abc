@@ -1,0 +1,24 @@
+abc
+X:1
+T:Atlas Echoes
+C:Melody Agent & Harmonist
+M:6/8
+L:1/8
+Q:1/8=160
+K:C pentatonic
+V:1 name="Lotar" clef=treble
+%%MIDI program 24
+|:G2A G2E G2A|G2E E2G G2A|G2A G2E E2D|C2E E2G C2E:|
+|:E2G E2C E2G|E2C C2E E2G|G2A G2E E2D|C2E E2G C2E:|
+V:2 name="Harp" clef=treble
+%%MIDI program 46
+|:E2G E2C E2G|E2C C2E E2G|E2G E2C C2B,|G,2C C2E G,2C:|
+|:C2E C2G, C2E|C2G, G,2C C2E|E2G E2C C2B,|G,2C C2E G,2C:|
+V:3 name="Gasba" clef=treble
+%%MIDI program 73
+|:z6|z6|E2G G2A G2E|C2E E2G C2E:|
+|:z6|z6|G2A G2E E2D|C2E E2G C2E:|
+V:4 name="Bendir" clef=percussion
+%%MIDI program 115
+|:z2 c2 z2 c2|z2 c2 z2 c2|z2 c2 z2 c2|z2 c2 z2 c2:|
+|:z2 c2 z2 c2|z2 c2 z2 c2|z2 c2 z2 c2|z2 c2 z2 c2:|

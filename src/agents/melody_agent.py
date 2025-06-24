@@ -141,7 +141,7 @@ class MelodyAgent(BaseAgent):
         
         # Use fine-tuned model
         current_melody = prompt
-        max_notes = 128  # Limit for melody generation
+        max_notes = 256  # Limit for melody generation
         for _ in range(max_notes):
             next_note, confidence = self._next_note(current_melody)
             current_melody += next_note

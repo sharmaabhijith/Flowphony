@@ -36,21 +36,31 @@ class MusicOrchestrator:
                 return line[2:].strip().replace(' ', '_') + '.abc'
         return "Untitled.abc"
     
-    def sample_music(self, prompt: str) -> dict:
+    def sample_music(self, prompt_data: dict) -> dict:
         """Run sequential music generation process"""
         
         print(f"\n=== Starting Music Generation Process ===")
-        print(f"Initial prompt: {prompt}")
+        print(f"Initial prompt: {prompt_data['prompt']}")
+        print(f"Title: {prompt_data.get('title', 'N/A')}")
+        print(f"Genre: {prompt_data.get('genre', 'N/A')}")
+        print(f"Key: {prompt_data.get('key', 'N/A')}")
+        print(f"Instruments: {prompt_data.get('instruments', 'N/A')}")
+        print(f"Tempo: {prompt_data.get('tempo', 'N/A')}")
+        print(f"Rhythm: {prompt_data.get('rhythm', 'N/A')}")
+        print(f"Emotion: {prompt_data.get('emotion', 'N/A')}")
+        
         print(f"\n--- Step 1: Leader Analysis ---")
-        leader_response = self.leader.create_melody_prompt(prompt)
+        leader_response = self.leader.create_melody_prompt(prompt_data)
         print(f"\n--- Step 2: Melody Composition ---")
         melody_response, confidence = self.melody.generate_melody(leader_response)
         print(f"\n--- Step 3: Harmony Addition ---")
-        harmony_response = self.harmony.add_harmony_to_melody(melody_response)
+        harmony_response = self.harmony.add_harmony_to_melody(melody_response, prompt_data)
         print(f"\n--- Step 4: Instrument Addition ---")
-        instrument_response = self.instrument.add_instrument_to_harmonic_melody(harmony_response)
+        instrument_response = self.instrument.add_instrument_to_harmonic_melody(harmony_response, prompt_data)
         print(f"\n--- Step 5: Music Arrangement ---")
-        arrangement_response = self.arrangement.arrange_music(instrument_response)
+        arrangement_response = self.arrangement.arrange_music(instrument_response, prompt_data)
+        print(f"\n--- Step 6: Music Review ---")
+        reviewer_response = self.reviewer.review_music(arrangement_response)
 
         final_response = {
             "music": arrangement_response,
@@ -59,13 +69,21 @@ class MusicOrchestrator:
         return final_response
     
     
-    def run_music_generation(self, prompt: str, results_dir: str) -> str:
+    def run_music_generation(self, prompt_data: dict, results_dir: str) -> str:
         """Run the music generation process for a single prompt"""
         chat_log_file = os.path.join(results_dir, 'chat_log.txt')
         
-        # Log the prompt
-        header = f"\n\n--- Prompt: {prompt} ---\n\n"
-        response = self.sample_music(prompt)["music"]
+        # Log the prompt data
+        header = f"\n\n--- Prompt: {prompt_data['prompt']} ---\n"
+        header += f"--- Title: {prompt_data.get('title', 'N/A')} ---\n"
+        header += f"--- Genre: {prompt_data.get('genre', 'N/A')} ---\n"
+        header += f"--- Key: {prompt_data.get('key', 'N/A')} ---\n"
+        header += f"--- Instruments: {prompt_data.get('instruments', 'N/A')} ---\n"
+        header += f"--- Tempo: {prompt_data.get('tempo', 'N/A')} ---\n"
+        header += f"--- Rhythm: {prompt_data.get('rhythm', 'N/A')} ---\n"
+        header += f"--- Emotion: {prompt_data.get('emotion', 'N/A')} ---\n\n"
+        
+        response = self.sample_music(prompt_data)["music"]
 
         with open(chat_log_file, "a") as f:
             f.write(header)

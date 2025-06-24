@@ -1,8 +1,13 @@
 [
-    {
-        "prompt": "Balkan Brass Extravaganza: Write a piece inspired by Balkan brass bands. Use a lively motif with an asymmetric time signature. The tempo should be fast and energetic, reflecting the exuberance of Balkan music.",
-        "title": "Balkan Brass Extravaganza",
-        "genre": "Balkan, Brass Band",
-        "key": "Unspecified"
-    }
+  {
+    "prompt": "Moroccan Majesty: Compose a traditional Moroccan piece rooted in chaabi style. Use the oud as the lead instrument, supported by qanun and darbuka for rhythm and ornamentation. The composition should evoke grandeur and nostalgia, using a maqam-based modal system such as Maqam Hijaz or Nahawand. Keep a moderate tempo with intricate rhythmic patterns typical of Moroccan classical music.",
+    "title": "Moroccan Majesty",
+    "genre": "Chaabi",
+    "key": "Maqam Hijaz or Nahawand",
+    "chord_progression": "Modal (Maqam-based, not Western chords)",
+    "instruments": "Bendir,Oud, Qanun, Darbuka",
+    "tempo": "Moderate",
+    "rhythm": "Intricate, Flowing",
+    "emotion": "Majestic, Nostalgic"
+  }
 ]

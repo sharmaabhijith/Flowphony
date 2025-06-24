@@ -17,10 +17,33 @@ class LeaderAgent(BaseAgent):
         response = self.call_deepinfra_api(messages)
         return response
     
-    def create_melody_prompt(self, client_request: str) -> str:
+    def create_melody_prompt(self, prompt_data: dict) -> str:
         """Create a specific prompt for melody generation based on client request"""
+        # Extract all the data from the JSON
+        prompt = prompt_data['prompt']
+        title = prompt_data.get('title', 'Untitled')
+        genre = prompt_data.get('genre', 'General')
+        key = prompt_data.get('key', 'C major')
+        chord_progression = prompt_data.get('chord_progression', 'Standard')
+        instruments = prompt_data.get('instruments', 'Piano')
+        tempo = prompt_data.get('tempo', 'Medium')
+        rhythm = prompt_data.get('rhythm', 'Standard')
+        emotion = prompt_data.get('emotion', 'Neutral')
+        
         melody_prompt = f"""
-            Based on the client's request: \n"{client_request}"
-            Please create a prompt for the melody agent to generate a melody that matches the following requirements:
+            Based on the client's detailed request, please create a comprehensive prompt for the melody agent to generate a melody that matches the following specifications:
+
+            TITLE: {title}
+            GENRE: {genre}
+            KEY: {key}
+            CHORD PROGRESSION: {chord_progression}
+            INSTRUMENTS: {instruments}
+            TEMPO: {tempo}
+            RHYTHM: {rhythm}
+            EMOTION: {emotion}
+            
+            CLIENT REQUEST: "{prompt}"
+            
+            Please create a detailed melody generation prompt that incorporates all these musical elements and specifications to guide the melody agent in creating an appropriate musical piece.
         """
         return self.generate_response(melody_prompt)

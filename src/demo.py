@@ -25,10 +25,10 @@ def main():
     # Load prompts from JSON file
     with open(prompts_file, "r") as file:
         prompts = json.load(file)
-    for index, prompt in enumerate(prompts):
-        print(f"Prompt {index + 1}: {prompt['prompt']}")
+    for index, prompt_data in enumerate(prompts):
+        print(f"Prompt {index + 1}: {prompt_data['prompt']}")
         print("================================================")
-        abc_filepath = orchestrator.run_music_generation(prompt['prompt'], results_dir)
+        abc_filepath = orchestrator.run_music_generation(prompt_data, results_dir)
         # if abc_filepath:
         #     wav_filename = convert_abc_to_wav(abc_filepath, results_dir)
         #     if wav_filename:
