@@ -19,7 +19,7 @@ class MusicOrchestrator:
         self.reviewer = ReviewerAgent(config.api_model)
 
         melody_config = config.melody_model if fine_tune["melody"] else config.api_model
-        self.melody = MelodyAgent(melody_config)
+        self.melody = MelodyAgent(melody_config, fine_tune=fine_tune["melody"])
         
         self.agents = {
             "leader": self.leader,
