@@ -1,3 +1,5 @@
+import re 
+import json
 from typing import Dict, Any
 from .helpers.base_agent import BaseAgent
 from .helpers.config import Config
@@ -10,11 +12,8 @@ class ReviewerAgent(BaseAgent):
     
     def generate_response(self, message: str) -> str:
         """Generate a response using DeepInfra API"""
-        # Prepare messages for API call
         messages = self.get_conversation_context()
         messages.append({"role": "user", "content": message})
-        
-        # Call DeepInfra API
         response = self.call_deepinfra_api(messages)
         return response
     
@@ -27,37 +26,30 @@ class ReviewerAgent(BaseAgent):
 
         Provide a comprehensive review with scores and feedback according to the specified criteria.
         """
-        return self.generate_response(review_prompt)
+        review_response = self.generate_response(review_prompt)
+        return self._extract_scores(review_response)
     
-    def extract_scores(self, review_response: str) -> Dict[str, int]:
+    def _extract_scores(self, review_response: str) -> Dict[str, int]:
         """Extract numerical scores from the review response"""
         try:
-            # Try to parse JSON from the response
-            import json
-            import re
-            
-            # Look for JSON in the response
             json_match = re.search(r'\{.*\}', review_response, re.DOTALL)
             if json_match:
                 json_str = json_match.group()
                 data = json.loads(json_str)
-                if 'scores' in data:
-                    return data['scores']
-            
-            # If no valid JSON found, return default scores
+                return data
             return {
-                "melody": 50,
-                "harmony": 50,
-                "rhythm": 50,
-                "timbre": 50,
-                "form": 50
+                "melody": 0.1,
+                "harmony": 0.1,
+                "rhythm": 0.1,
+                "timbre": 0.1,
+                "form": 0.1
             }
         except Exception as e:
             print(f"Error extracting scores: {e}")
             return {
-                "melody": 50,
-                "harmony": 50,
-                "rhythm": 50,
-                "timbre": 50,
-                "form": 50
+                "melody": 0.1,
+                "harmony": 0.1,
+                "rhythm": 0.1,
+                "timbre": 0.1,
+                "form": 0.1
             } 

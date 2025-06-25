@@ -68,7 +68,7 @@ training:
   logs_dir: "logs/melody"
 
 # Prompt configuration
-prompts_file: null  # Path to JSON file containing custom prompts (optional)
+dataset_dir: "dataset/music_prompts.json"  # Path to JSON file containing custom prompts (optional)
 resume_from: null   # Path to checkpoint to resume training from (optional)
 evaluate: false     # Whether to evaluate model after training
 

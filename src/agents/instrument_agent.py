@@ -23,9 +23,10 @@ class InstrumentAgent(BaseAgent):
         instruments_info = ""
         genre_info = ""
         
-        if prompt_data:
-            instruments_info = f"Specified Instruments: {prompt_data.get('instruments', 'Piano')}\n"
-            genre_info = f"Genre: {prompt_data.get('genre', 'General')}\n"
+        if prompt_data["instruments"]:
+            instruments_info = f"Specified Instruments: {prompt_data.get('instruments', 'Your choice')}\n"
+        if prompt_data["genre"]:
+            genre_info = f"Genre: {prompt_data.get('genre', 'Your choice')}\n"
         
         instrument_prompt = f"""
         Given the following harmonic melody in ABC notation:

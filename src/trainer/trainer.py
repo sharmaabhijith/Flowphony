@@ -70,16 +70,15 @@ class Trainer:
         )
         self.optimizer.step()
     
-    def train(self, prompts: List[str]):
+    def train(self, prompts: List[dict]):
         """Train the model using the provided prompts"""
         iteration = 0
         prompt_index = 0
 
         self.orchestrator.melody.model.train()
         progress_bar = tqdm(total=self.config.training.max_iterations, desc="Training")
-        while iteration < self.config.training.max_iterations:
-            prompt = prompts[prompt_index % len(prompts)]
-            prompt_index += 1
+        while iteration < len(prompts):
+            prompt = prompts[iteration]
             response = self.orchestrator.sample_music(prompt)
             music = response["music"]
             confidence = response["confidence"]

@@ -24,10 +24,12 @@ class HarmonyAgent(BaseAgent):
         chord_progression_info = ""
         genre_info = ""
         
-        if prompt_data:
-            key_info = f"Key: {prompt_data.get('key', 'C major')}\n"
-            chord_progression_info = f"Chord Progression: {prompt_data.get('chord_progression', 'Standard')}\n"
-            genre_info = f"Genre: {prompt_data.get('genre', 'General')}\n"
+        if prompt_data["key"]:
+            key_info = f"Key: {prompt_data.get('key', 'Your choice')}\n"
+        if prompt_data["chord_progression"]:
+            chord_progression_info = f"Chord Progression: {prompt_data.get('chord_progression', 'Your choice')}\n"
+        if prompt_data["genre"]:
+            genre_info = f"Genre: {prompt_data.get('genre', 'Your choice')}\n"
         
         harmony_prompt = f"""
         Given the following melody in ABC notation:

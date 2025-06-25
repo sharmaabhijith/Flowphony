@@ -22,13 +22,13 @@ class LeaderAgent(BaseAgent):
         # Extract all the data from the JSON
         prompt = prompt_data['prompt']
         title = prompt_data.get('title', 'Untitled')
-        genre = prompt_data.get('genre', 'General')
-        key = prompt_data.get('key', 'C major')
-        chord_progression = prompt_data.get('chord_progression', 'Standard')
-        instruments = prompt_data.get('instruments', 'Piano')
-        tempo = prompt_data.get('tempo', 'Medium')
-        rhythm = prompt_data.get('rhythm', 'Standard')
-        emotion = prompt_data.get('emotion', 'Neutral')
+        genre = prompt_data.get('genre', 'Your choice')
+        key = prompt_data.get('key', 'Your choice')
+        chord_progression = prompt_data.get('chord_progression', 'Your choice')
+        instruments = prompt_data.get('instruments', 'Your choice')
+        tempo = prompt_data.get('tempo', 'Your choice')
+        rhythm = prompt_data.get('rhythm', 'Your choice')
+        emotion = prompt_data.get('emotion', 'Your choice')
         
         melody_prompt = f"""
             Based on the client's detailed request, please create a comprehensive prompt for the melody agent to generate a melody that matches the following specifications:

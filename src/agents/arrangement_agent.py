@@ -25,10 +25,12 @@ class ArrangementAgent(BaseAgent):
         rhythm_info = ""
         emotion_info = ""
         
-        if prompt_data:
-            tempo_info = f"Tempo: {prompt_data.get('tempo', 'Medium')}\n"
-            rhythm_info = f"Rhythm: {prompt_data.get('rhythm', 'Standard')}\n"
-            emotion_info = f"Emotion: {prompt_data.get('emotion', 'Neutral')}\n"
+        if prompt_data["tempo"]:
+            tempo_info = f"Tempo: {prompt_data.get('tempo', 'Your choice')}\n"
+        if prompt_data["rhythm"]:
+            rhythm_info = f"Rhythm: {prompt_data.get('rhythm', 'Your choice')}\n"
+        if prompt_data["emotion"]:
+            emotion_info = f"Emotion: {prompt_data.get('emotion', 'Your choice')}\n"
         
         arrangement_prompt = f"""
         Given the following musical content:
